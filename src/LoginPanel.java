@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -19,7 +20,11 @@ public class LoginPanel extends JPanel {
         buttonLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.changeCurrentPanel(new WorkoutsPanel());
+                try {
+                    Main.changeCurrentPanel(new WorkoutsPanel());
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 //TODO: perform login
             }
         });

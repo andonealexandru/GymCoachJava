@@ -1,9 +1,14 @@
+import data.Workout;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class WorkoutsPanel extends JPanel{
     private JLabel labelTitle;
@@ -17,9 +22,11 @@ public class WorkoutsPanel extends JPanel{
     private JLabel labelAdd;
     private JButton buttonAdd;
 
-    public WorkoutsPanel() {
+    private Statement statement;
+
+    public WorkoutsPanel() throws SQLException {
+        statement = DatabaseConnection.connection.createStatement();
         //construct preComponents
-        String[] listWorkoutsItems = {"Item 1", "Item 2", "Item 3"};
 
         //construct components
         labelTitle = new JLabel ("GymCoach");
@@ -30,7 +37,7 @@ public class WorkoutsPanel extends JPanel{
                 Main.changeCurrentPanel(new FirstPagePanel());
             }
         });
-        listWorkouts = new JList(listWorkoutsItems);
+        listWorkouts = new JList(getWorkouts());
         listWorkouts.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -97,5 +104,19 @@ public class WorkoutsPanel extends JPanel{
         textFieldAdd.setBounds (400, 400, 180, 25);
         labelAdd.setBounds (255, 400, 145, 25);
         buttonAdd.setBounds (575, 400, 100, 25);
+    }
+
+    String[] getWorkouts() throws SQLException {
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM workout");
+
+        String[] data = new String[10];
+        int k = 0;
+        while (resultSet.next()) {
+            Workout workout = new Workout(resultSet);
+            data[k++] = workout.getName().toString();
+            System.out.println(workout.getID_workout());
+        };
+
+        return data;
     }
 }

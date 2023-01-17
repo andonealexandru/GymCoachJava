@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class ExercisesPanel extends JPanel {
     private JLabel labelTitle;
@@ -38,7 +39,11 @@ public class ExercisesPanel extends JPanel {
         buttonBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.changeCurrentPanel(new WorkoutsPanel());
+                try {
+                    Main.changeCurrentPanel(new WorkoutsPanel());
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         listExercises = new JList (listExercisesItems);

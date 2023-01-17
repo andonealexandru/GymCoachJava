@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class RegisterPanel extends JPanel {
     private JButton buttonRegister;
@@ -19,7 +20,11 @@ public class RegisterPanel extends JPanel {
         buttonRegister.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.changeCurrentPanel(new WorkoutsPanel());
+                try {
+                    Main.changeCurrentPanel(new WorkoutsPanel());
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         labelTitle = new JLabel ("GymCoach");
