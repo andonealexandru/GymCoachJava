@@ -25,7 +25,7 @@ public class WorkoutsPanel extends JPanel{
 
     private Statement statement;
 
-    public WorkoutsPanel(int user_id) throws SQLException {
+    public WorkoutsPanel(int userId) throws SQLException {
         statement = DatabaseConnection.connection.createStatement();
         //construct preComponents
 
@@ -38,7 +38,7 @@ public class WorkoutsPanel extends JPanel{
                 Main.changeCurrentPanel(new FirstPagePanel());
             }
         });
-        listWorkouts = new JList(getWorkouts());
+        listWorkouts = new JList(Workout.GetWorkoutsByUserId(userId));
         listWorkouts.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -115,7 +115,7 @@ public class WorkoutsPanel extends JPanel{
         while (resultSet.next()) {
             Workout workout = new Workout(resultSet);
             data[k++] = workout.getName().toString();
-            System.out.println(workout.getID_workout());
+            System.out.println(workout.getWorkoutId());
         };
 
         return data;
