@@ -2,6 +2,7 @@ import data.DatabaseConnection;
 import data.Workout;
 
 import javax.swing.*;
+import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,15 +39,17 @@ public class WorkoutsPanel extends JPanel{
                 Main.changeCurrentPanel(new FirstPagePanel());
             }
         });
-        listWorkouts = new JList(getWorkouts());
+        listWorkouts = new JList<>();
         listWorkouts.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JList list = (JList)e.getSource();
+                if (e.getClickCount() == 2) {
+                    JList list = (JList) e.getSource();
 
-                int index = list.locationToIndex(e.getPoint()); // al catelea element din lista e
-                System.out.println(index);
-                Main.changeCurrentPanel(new ExercisesPanel());
+                    int index = list.locationToIndex(e.getPoint()); // al catelea element din lista e
+                    System.out.println(index);
+                    Main.changeCurrentPanel(new ExercisesPanel());
+                }
             }
         });
         buttonSearch = new JButton ("Cauta");

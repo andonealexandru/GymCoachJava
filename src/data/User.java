@@ -26,14 +26,16 @@ public class User {
     public static User GetByUsername(String username) throws SQLException {
         Statement statement = DatabaseConnection.connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM public.user WHERE username = '" + username + "';");
+        if (!resultSet.isBeforeFirst())
+            return null;
         resultSet.next();
         return new User(resultSet);
     }
 
     public static boolean CreateUser(User user) throws SQLException {
         Statement statement = DatabaseConnection.connection.createStatement();
-        //TODO: verificare sa nu existe 2 useri cu acelasi username
-        // daca mai exista un user cu acelasi username, return false;
+        if (GetByUsername(user.username) != null)
+            return false;
         statement.executeUpdate("INSERT INTO public.user(username, password, active) VALUES ('" +
                 user.username + "', '" + user.password + "', '1');");
         return true;

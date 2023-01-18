@@ -26,7 +26,7 @@ public class RegisterPanel extends JPanel {
                     boolean created = User.CreateUser(new User(textFieldUsername.getText(), textFieldPassword.getText(), true));
                     if (created)
                         Main.changeCurrentPanel(new WorkoutsPanel(User.GetByUsername(textFieldUsername.getText()).getUser_id()));
-                    else JOptionPane.showMessageDialog(null, "User already exists");
+                    else JOptionPane.showMessageDialog(null, "Numele de utlizator exista deja!");
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }

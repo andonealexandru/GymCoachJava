@@ -25,9 +25,9 @@ public class LoginPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     User currentUser = User.GetByUsername(textFieldUsername.getText());
-                    if (currentUser.getActive() && Objects.equals(currentUser.getPassword(), textFieldPassword.getText()))
+                    if (currentUser != null && currentUser.getActive() && Objects.equals(currentUser.getPassword(), textFieldPassword.getText()))
                         Main.changeCurrentPanel(new WorkoutsPanel(currentUser.getUser_id())); // change to first page
-                    else JOptionPane.showMessageDialog(null, "Username or password not correct");
+                    else JOptionPane.showMessageDialog(null, "Nume de utilizator sau parola incorecte!");
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
