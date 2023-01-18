@@ -2,41 +2,57 @@ package data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
 
 public class Exercise {
-    private Integer ID_exercise;
-    private Integer ID_workout;
+    private Integer exerciseId;
+    private Integer workoutId;
     private String name;
-    private String targetMuscle;
 
-    public Exercise(Integer ID_exercise, Integer ID_workout, String name, String targetMuscle) {
-        this.ID_exercise = ID_exercise;
-        this.ID_workout = ID_workout;
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public Exercise(Integer exerciseId, Integer workoutId, String name, String targetMuscle) {
+        this.exerciseId = exerciseId;
+        this.workoutId = workoutId;
         this.name = name;
-        this.targetMuscle = targetMuscle;
     }
 
     public Exercise(ResultSet resultSet) throws SQLException {
-        ID_exercise = resultSet.getInt("ID_exercise");
-        ID_workout = resultSet.getInt("ID_workout");
+        exerciseId = resultSet.getInt("exercise_id");
+        workoutId = resultSet.getInt("workout_id");
         name = resultSet.getString("name");
-        targetMuscle = resultSet.getString("targetMuscle");
     }
 
-    public Integer getID_exercise() {
-        return ID_exercise;
+
+    public static Vector<Exercise> GetExercisesByWorkoutId(Integer workoutId) throws SQLException {
+        Statement statement = DatabaseConnection.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM public.exercise WHERE workout_id =" + workoutId + ";");
+        Vector<Exercise> exercises = new Vector<>();
+        while(resultSet.next())
+        {
+            exercises.add(new Exercise((resultSet)));
+        }
+        return exercises;
     }
 
-    public void setID_exercise(Integer ID_exercise) {
-        this.ID_exercise = ID_exercise;
+    public Integer getExerciseId() {
+        return exerciseId;
     }
 
-    public Integer getID_workout() {
-        return ID_workout;
+    public void setExerciseId(Integer ID_exercise) {
+        this.exerciseId = ID_exercise;
     }
 
-    public void setID_workout(Integer ID_workout) {
-        this.ID_workout = ID_workout;
+    public Integer getWorkoutId() {
+        return workoutId;
+    }
+
+    public void setWorkoutId(Integer workoutId) {
+        this.workoutId = workoutId;
     }
 
     public String getName() {
@@ -45,13 +61,5 @@ public class Exercise {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTargetMuscle() {
-        return targetMuscle;
-    }
-
-    public void setTargetMuscle(String targetMuscle) {
-        this.targetMuscle = targetMuscle;
     }
 }

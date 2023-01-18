@@ -1,7 +1,12 @@
+import data.Exercise;
+import data.Set;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class ExercisesPanel extends JPanel {
@@ -15,7 +20,7 @@ public class ExercisesPanel extends JPanel {
     private JButton buttonAddExercise;
     private JLabel labelExercise;
     private JLabel labelExerciseName;
-    private JList listSet;
+    private JList listSets;
     private JLabel labelAddSet;
     private JTextField textFieldRepetitions;
     private JLabel labelRepetitions;
@@ -27,10 +32,10 @@ public class ExercisesPanel extends JPanel {
     private JComboBox comboBoxMuscleGroup;
     private JLabel labelMuscleGroup;
 
-    public ExercisesPanel(int workoutId) {
+
+    public ExercisesPanel(int workoutId) throws SQLException{
         //construct preComponents
-        String[] listExercisesItems = {"Item 1", "Item 2", "Item 3"};
-        String[] listSetItems = {"Item 1", "Item 2", "Item 3"};
+        String[] listSetItems = {""};
         String[] comboBoxMuscleGroupItems = {"Item 1", "Item 2", "Item 3"};
 
         //construct components
@@ -46,7 +51,32 @@ public class ExercisesPanel extends JPanel {
                 }
             }
         });
-        listExercises = new JList (listExercisesItems);
+        try {
+            listExercises = new JList (Exercise.GetExercisesByWorkoutId(workoutId));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        listSets = new JList(listSetItems);
+        listExercises.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JList list = (JList) e.getSource();
+
+                    Object selectedObj = list.getSelectedValue();
+                    if (selectedObj instanceof Exercise) {
+                        Exercise selectedExercise = (Exercise) selectedObj;
+                        System.out.println(selectedExercise.getExerciseId());
+                        try {
+                            listSets.setListData(Set.GetSetsByExerciseId(selectedExercise.getExerciseId()));
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                }
+            }
+        });
         labelWorkout = new JLabel ("Antrenament");
         labelWorkoutName = new JLabel ("antrenamentulMeu");
         labelAddExercise = new JLabel ("Adauga un exercitiu");
@@ -54,7 +84,6 @@ public class ExercisesPanel extends JPanel {
         buttonAddExercise = new JButton ("Adauga");
         labelExercise = new JLabel ("Exercitiu");
         labelExerciseName = new JLabel ("exercitiul meu");
-        listSet = new JList (listSetItems);
         labelAddSet = new JLabel ("Adauga un set");
         textFieldRepetitions = new JTextField (5);
         labelRepetitions = new JLabel ("Numar repetari:");
@@ -81,7 +110,7 @@ public class ExercisesPanel extends JPanel {
         add (buttonAddExercise);
         add (labelExercise);
         add (labelExerciseName);
-        add (listSet);
+        add (listSets);
         add (labelAddSet);
         add (textFieldRepetitions);
         add (labelRepetitions);
@@ -104,7 +133,7 @@ public class ExercisesPanel extends JPanel {
         buttonAddExercise.setBounds (345, 390, 95, 25);
         labelExercise.setBounds (495, 125, 100, 25);
         labelExerciseName.setBounds (590, 125, 185, 25);
-        listSet.setBounds (495, 160, 390, 215);
+        listSets.setBounds (495, 160, 390, 215);
         labelAddSet.setBounds (495, 390, 100, 25);
         textFieldRepetitions.setBounds (705, 390, 180, 25);
         labelRepetitions.setBounds (595, 390, 100, 25);

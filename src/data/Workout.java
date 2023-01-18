@@ -9,7 +9,6 @@ public class Workout {
     private Integer workoutId;
     private String name;
     private Integer muscleId;
-
     @Override
     public String toString() {
         return name;
@@ -19,7 +18,7 @@ public class Workout {
 
     public Workout(String name, Integer targetMuscleGroup, Integer userId) {
         this.name = name;
-        this.muscleId = targetMuscleGroup;
+        this.muscleId = muscleId;
         this.userId = userId;
     }
 

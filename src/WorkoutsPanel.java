@@ -45,12 +45,15 @@ public class WorkoutsPanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     JList list = (JList) e.getSource();
-
                     Object selectedObj = list.getSelectedValue();
                     if (selectedObj instanceof Workout) {
                         Workout selectedWorkout = (Workout) selectedObj;
                         System.out.println(selectedWorkout.getWorkoutId());
-                        Main.changeCurrentPanel(new ExercisesPanel(selectedWorkout.getWorkoutId()));
+                        try {
+                            Main.changeCurrentPanel(new ExercisesPanel(selectedWorkout.getWorkoutId()));
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
             }
@@ -129,19 +132,5 @@ public class WorkoutsPanel extends JPanel{
         textFieldAdd.setBounds (400, 400, 180, 25);
         labelAdd.setBounds (255, 400, 145, 25);
         buttonAdd.setBounds (575, 400, 100, 25);
-    }
-
-    String[] getWorkouts() throws SQLException {
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM workout");
-
-        String[] data = new String[10];
-        int k = 0;
-        while (resultSet.next()) {
-            Workout workout = new Workout(resultSet);
-            data[k++] = workout.getName().toString();
-            System.out.println(workout.getWorkoutId());
-        };
-
-        return data;
     }
 }
