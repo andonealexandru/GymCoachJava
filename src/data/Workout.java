@@ -1,31 +1,78 @@
 package data;
 
+import java.util.Vector;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Workout {
-    private Integer ID_workout;
+    private Integer workoutId;
     private String name;
-    private String targetMuscleGroup;
+    private Integer muscleId;
 
-    public Workout(Integer ID_workout, String name, String targetMuscleGroup) {
-        this.ID_workout = ID_workout;
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    private Integer userId;
+
+    public Workout(String name, Integer targetMuscleGroup, Integer userId) {
         this.name = name;
-        this.targetMuscleGroup = targetMuscleGroup;
+        this.muscleId = targetMuscleGroup;
+        this.userId = userId;
     }
 
     public Workout(ResultSet resultSet) throws SQLException {
-        ID_workout = resultSet.getInt("ID_workout");
+        workoutId = resultSet.getInt("workout_id");
         name = resultSet.getString("name");
-        targetMuscleGroup = resultSet.getString("targetMuscleGroup");
+        muscleId = resultSet.getInt("muscle_id");
+        userId = resultSet.getInt("user_id");
     }
 
-    public Integer getID_workout() {
-        return ID_workout;
+    public static Vector<Workout> GetWorkoutsByUserId(Integer userId) throws SQLException {
+        Statement statement = DatabaseConnection.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM public.workout WHERE user_id =" + userId + ";");
+        Vector<Workout> workouts = new Vector<>();
+        while(resultSet.next())
+        {
+            workouts.add(new Workout(resultSet));
+        }
+        return workouts;
     }
 
-    public void setID_workout(Integer ID_workout) {
-        this.ID_workout = ID_workout;
+    public static boolean CreateWorkout(Workout workout) throws SQLException {
+        Statement statement = DatabaseConnection.connection.createStatement();
+        statement.executeUpdate("INSERT INTO public.workout(name, user_id, muscle_id) VALUES ('"
+                + workout.name + "', '" + workout.userId + "', '" + workout.muscleId + "');");
+        return true;
+    }
+
+    public static Vector<Workout> GetWorkoutsByString(int userId, String workout) throws SQLException {
+        Statement statement = DatabaseConnection.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM public.workout WHERE user_id = "
+                + userId + " AND name LIKE '%" + workout + "%';");
+        Vector<Workout> workouts = new Vector<>();
+        while (resultSet.next()) {
+            workouts.add(new Workout(resultSet));
+        }
+        return workouts;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getWorkoutId() {
+        return workoutId;
+    }
+
+    public void setWorkoutId(Integer ID_workout) {
+        this.workoutId = ID_workout;
     }
 
     public String getName() {
@@ -36,11 +83,11 @@ public class Workout {
         this.name = name;
     }
 
-    public String getTargetMuscleGroup() {
-        return targetMuscleGroup;
+    public Integer getMuscleId() {
+        return muscleId;
     }
 
-    public void setTargetMuscleGroup(String targetMuscleGroup) {
-        this.targetMuscleGroup = targetMuscleGroup;
+    public void setMuscleId(Integer muscleId) {
+        this.muscleId = muscleId;
     }
 }

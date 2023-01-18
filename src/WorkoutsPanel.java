@@ -26,7 +26,7 @@ public class WorkoutsPanel extends JPanel{
 
     private Statement statement;
 
-    public WorkoutsPanel(int user_id) throws SQLException {
+    public WorkoutsPanel(int userId) throws SQLException {
         statement = DatabaseConnection.connection.createStatement();
         //construct preComponents
 
@@ -39,20 +39,33 @@ public class WorkoutsPanel extends JPanel{
                 Main.changeCurrentPanel(new FirstPagePanel());
             }
         });
-        listWorkouts = new JList<>();
+        listWorkouts = new JList(Workout.GetWorkoutsByUserId(userId));
         listWorkouts.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     JList list = (JList) e.getSource();
 
-                    int index = list.locationToIndex(e.getPoint()); // al catelea element din lista e
-                    System.out.println(index);
-                    Main.changeCurrentPanel(new ExercisesPanel());
+                    Object selectedObj = list.getSelectedValue();
+                    if (selectedObj instanceof Workout) {
+                        Workout selectedWorkout = (Workout) selectedObj;
+                        System.out.println(selectedWorkout.getWorkoutId());
+                        Main.changeCurrentPanel(new ExercisesPanel(selectedWorkout.getWorkoutId()));
+                    }
                 }
             }
         });
         buttonSearch = new JButton ("Cauta");
+        buttonSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    listWorkouts.setListData(Workout.GetWorkoutsByString(userId, textFieldSearch.getText()));
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
         textFieldSearch = new JTextField (5);
         labelSearch = new JLabel ("Cauta un antrenament");
         buttonPlus = new JButton ("+");
@@ -78,6 +91,14 @@ public class WorkoutsPanel extends JPanel{
                 textFieldAdd.setVisible(false);
                 buttonAdd.setVisible(false);
                 labelAdd.setVisible(false);
+
+                try {
+                    Workout.CreateWorkout(new Workout(textFieldAdd.getText(), 1, userId));
+                    listWorkouts.setListData(Workout.GetWorkoutsByUserId(userId));
+                    textFieldAdd.setText("");
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -118,7 +139,7 @@ public class WorkoutsPanel extends JPanel{
         while (resultSet.next()) {
             Workout workout = new Workout(resultSet);
             data[k++] = workout.getName().toString();
-            System.out.println(workout.getID_workout());
+            System.out.println(workout.getWorkoutId());
         };
 
         return data;

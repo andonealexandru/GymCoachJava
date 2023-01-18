@@ -27,7 +27,7 @@ public class ExercisesPanel extends JPanel {
     private JComboBox comboBoxMuscleGroup;
     private JLabel labelMuscleGroup;
 
-    public ExercisesPanel() {
+    public ExercisesPanel(int workoutId) {
         //construct preComponents
         String[] listExercisesItems = {"Item 1", "Item 2", "Item 3"};
         String[] listSetItems = {"Item 1", "Item 2", "Item 3"};
