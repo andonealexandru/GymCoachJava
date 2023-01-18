@@ -1,3 +1,4 @@
+import data.DatabaseConnection;
 import data.Workout;
 
 import javax.swing.*;
@@ -24,7 +25,7 @@ public class WorkoutsPanel extends JPanel{
 
     private Statement statement;
 
-    public WorkoutsPanel() throws SQLException {
+    public WorkoutsPanel(int user_id) throws SQLException {
         statement = DatabaseConnection.connection.createStatement();
         //construct preComponents
 

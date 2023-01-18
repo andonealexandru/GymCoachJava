@@ -1,6 +1,9 @@
+import data.User;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
+import java.util.Objects;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -21,11 +24,13 @@ public class LoginPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Main.changeCurrentPanel(new WorkoutsPanel());
+                    User currentUser = User.GetByUsername(textFieldUsername.getText());
+                    if (currentUser.getActive() && Objects.equals(currentUser.getPassword(), textFieldPassword.getText()))
+                        Main.changeCurrentPanel(new WorkoutsPanel(currentUser.getUser_id())); // change to first page
+                    else JOptionPane.showMessageDialog(null, "Username or password not correct");
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
-                //TODO: perform login
             }
         });
         labelTitle = new JLabel ("GymCoach");

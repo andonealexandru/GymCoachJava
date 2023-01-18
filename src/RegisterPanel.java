@@ -1,3 +1,5 @@
+import data.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,7 +23,10 @@ public class RegisterPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Main.changeCurrentPanel(new WorkoutsPanel());
+                    boolean created = User.CreateUser(new User(textFieldUsername.getText(), textFieldPassword.getText(), true));
+                    if (created)
+                        Main.changeCurrentPanel(new WorkoutsPanel(User.GetByUsername(textFieldUsername.getText()).getUser_id()));
+                    else JOptionPane.showMessageDialog(null, "User already exists");
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }

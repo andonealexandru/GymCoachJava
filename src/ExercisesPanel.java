@@ -40,7 +40,7 @@ public class ExercisesPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Main.changeCurrentPanel(new WorkoutsPanel());
+                    Main.changeCurrentPanel(new WorkoutsPanel(0));
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
