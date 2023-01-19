@@ -82,15 +82,19 @@ public class ExercisesPanel extends JPanel {
             }
         });
         Vector<Muscle> muscles = Muscle.GetMuscles();
-        comboBoxMuscleGroup = new JComboBox(Muscle.GetMuscles());
-        comboBoxMuscleGroup.setSelectedItem(Muscle.GetMuscles().get(Workout.GetWorkoutForAnExercise(workoutId).getMuscleId()));
+        comboBoxMuscleGroup = new JComboBox(muscles);
+        comboBoxMuscleGroup.setSelectedItem(muscles.get(Workout.GetWorkoutForAnExercise(workoutId).getMuscleId()));
         comboBoxMuscleGroup.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Object selectedObj = comboBoxMuscleGroup.getSelectedItem();
                 if (selectedObj instanceof Muscle) {
                     Muscle selectedMuscle = (Muscle) selectedObj;
-                    System.out.println(selectedMuscle.getName());
+                    try {
+                        Workout.UpdateMuscleForWorkout(workoutId, selectedMuscle.getMuscleId());
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });
@@ -111,6 +115,8 @@ public class ExercisesPanel extends JPanel {
                 }
             }
         });
+
+
         labelExercise = new JLabel ("Exercitiu");
         labelExerciseName = new JLabel ("");
         labelAddSet = new JLabel ("Adauga un set");

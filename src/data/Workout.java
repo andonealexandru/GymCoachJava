@@ -47,6 +47,11 @@ public class Workout {
         return true;
     }
 
+    public static void UpdateMuscleForWorkout(Integer workoutId, Integer muscleId) throws SQLException {
+        Statement statement = DatabaseConnection.connection.createStatement();
+        statement.executeUpdate("UPDATE workout SET muscle_id =" + muscleId  + "WHERE workout_id = " + workoutId +";");
+    }
+
     public static Vector<Workout> GetWorkoutsByString(int userId, String workout) throws SQLException {
         Statement statement = DatabaseConnection.connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT workout.workout_id, workout.name, workout.user_id, workout.muscle_id, muscle.name FROM public.workout " +
