@@ -16,7 +16,7 @@ public class Workout {
 
     private Integer userId;
 
-    public Workout(String name, Integer targetMuscleGroup, Integer userId) {
+    public Workout(String name, Integer muscleId, Integer userId) {
         this.name = name;
         this.muscleId = muscleId;
         this.userId = userId;
@@ -58,8 +58,15 @@ public class Workout {
         return workouts;
     }
 
+    public static Workout GetWorkoutForAnExercise(Integer workoutId_exercise) throws SQLException {
+        Statement statement = DatabaseConnection.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM public.workout WHERE workout_id =" + workoutId_exercise + ";");
+        resultSet.next();
+        return new Workout((resultSet));
+    }
+
     public Integer getUserId() {
-        return userId;
+       return userId;
     }
 
     public void setUserId(Integer userId) {

@@ -1,5 +1,6 @@
 import data.Exercise;
 import data.Set;
+import data.Workout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +38,12 @@ public class ExercisesPanel extends JPanel {
         //construct preComponents
         String[] listSetItems = {""};
         String[] comboBoxMuscleGroupItems = {"Item 1", "Item 2", "Item 3"};
+        try {
+            listSets.setListData();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+
 
         //construct components
         labelTitle = new JLabel ("GymCoach");
@@ -45,7 +52,8 @@ public class ExercisesPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Main.changeCurrentPanel(new WorkoutsPanel(0));
+                    Workout workout = Workout.GetWorkoutForAnExercise(workoutId);
+                    Main.changeCurrentPanel(new WorkoutsPanel(workout.getUserId()));
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }

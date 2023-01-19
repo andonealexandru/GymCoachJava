@@ -9,25 +9,30 @@ public class Set {
 
     private Integer setId;
     private Integer exerciseId;
-    private String name;
+    private Integer weight;
+
+   private Integer repetitions;
+
     private String mentions;
 
     @Override
     public String toString() {
-        return name;
+        return weight + " kg, " + repetitions + "reps, " + mentions;
     }
 
-    public Set(Integer setId, Integer exerciseId, String name, String mentions) {
+    public Set(Integer setId, Integer exerciseId, Integer weight, Integer repetitions, String mentions) {
         this.setId = setId;
         this.exerciseId = exerciseId;
-        this.name = name;
+        this.weight = weight;
+        this.repetitions = repetitions;
         this.mentions = mentions;
     }
 
     public Set(ResultSet resultSet) throws SQLException {
         setId = resultSet.getInt("set_id");
         exerciseId = resultSet.getInt("exercise_id");
-        name = resultSet.getString("name");
+        weight = resultSet.getInt("weight");
+        repetitions = resultSet.getInt("repetitions");
         mentions = resultSet.getString("mentions");
     }
 
@@ -58,12 +63,12 @@ public class Set {
         this.exerciseId = exerciseId;
     }
 
-    public String getName() {
-        return name;
+    public Integer getWeight() {
+        return weight;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public String getMentions() {
