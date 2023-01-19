@@ -1,6 +1,7 @@
 import data.Exercise;
 import data.Set;
 import data.Workout;
+import data.Muscle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +38,6 @@ public class ExercisesPanel extends JPanel {
     public ExercisesPanel(int workoutId) throws SQLException{
         //construct preComponents
         String[] listSetItems = {""};
-        String[] comboBoxMuscleGroupItems = {"Item 1", "Item 2", "Item 3"};
 
         //construct components
         labelTitle = new JLabel ("GymCoach");
@@ -79,6 +79,7 @@ public class ExercisesPanel extends JPanel {
                 }
             }
         });
+        comboBoxMuscleGroup = new JComboBox(Muscle.GetMuscles());
         labelWorkout = new JLabel ("Antrenament");
         labelWorkoutName = new JLabel ("antrenamentulMeu");
         labelAddExercise = new JLabel ("Adauga un exercitiu");
