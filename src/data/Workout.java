@@ -49,8 +49,9 @@ public class Workout {
 
     public static Vector<Workout> GetWorkoutsByString(int userId, String workout) throws SQLException {
         Statement statement = DatabaseConnection.connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM public.workout WHERE user_id = "
-                + userId + " AND name LIKE '%" + workout + "%';");
+        ResultSet resultSet = statement.executeQuery("SELECT workout.workout_id, workout.name, workout.user_id, workout.muscle_id, muscle.name FROM public.workout " +
+                "INNER JOIN public.muscle ON workout.muscle_id = muscle.muscle_id\n" +
+                "WHERE workout.name LIKE '%" + workout + "%' OR muscle.name LIKE '%" + workout + "%';");
         Vector<Workout> workouts = new Vector<>();
         while (resultSet.next()) {
             workouts.add(new Workout(resultSet));

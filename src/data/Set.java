@@ -10,9 +10,7 @@ public class Set {
     private Integer setId;
     private Integer exerciseId;
     private Integer weight;
-
-   private Integer repetitions;
-
+    private Integer repetitions;
     private String mentions;
 
     @Override
@@ -20,8 +18,7 @@ public class Set {
         return weight + " kg, " + repetitions + "reps, " + mentions;
     }
 
-    public Set(Integer setId, Integer exerciseId, Integer weight, Integer repetitions, String mentions) {
-        this.setId = setId;
+    public Set(Integer exerciseId, String mentions, Integer weight, Integer repetitions) {
         this.exerciseId = exerciseId;
         this.weight = weight;
         this.repetitions = repetitions;
@@ -31,9 +28,9 @@ public class Set {
     public Set(ResultSet resultSet) throws SQLException {
         setId = resultSet.getInt("set_id");
         exerciseId = resultSet.getInt("exercise_id");
+        mentions = resultSet.getString("mentions");
         weight = resultSet.getInt("weight");
         repetitions = resultSet.getInt("repetitions");
-        mentions = resultSet.getString("mentions");
     }
 
     public static Vector<Set> GetSetsByExerciseId(Integer exerciseId) throws SQLException {
@@ -45,6 +42,12 @@ public class Set {
             sets.add(new Set(resultSet));
         }
         return sets;
+    }
+
+    public static void CreateSet(Set set) throws SQLException {
+        Statement statement = DatabaseConnection.connection.createStatement();
+        statement.executeUpdate("INSERT INTO set(exercise_id, mentions, weight, repetitions) VALUES ('"
+                + set.exerciseId + "', '" + set.mentions + "', '" + set.weight + "', '" + set.repetitions + "');");
     }
 
     public Integer getSetId() {
@@ -69,6 +72,14 @@ public class Set {
 
     public void setWeight(Integer weight) {
         this.weight = weight;
+    }
+
+    public Integer getRepetitions() {
+        return repetitions;
+    }
+
+    public void setRepetitions(Integer repetitions) {
+        this.repetitions = repetitions;
     }
 
     public String getMentions() {

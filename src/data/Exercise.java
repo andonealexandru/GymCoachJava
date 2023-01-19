@@ -15,8 +15,7 @@ public class Exercise {
         return name;
     }
 
-    public Exercise(Integer exerciseId, Integer workoutId, String name, String targetMuscle) {
-        this.exerciseId = exerciseId;
+    public Exercise(Integer workoutId, String name) {
         this.workoutId = workoutId;
         this.name = name;
     }
@@ -27,7 +26,6 @@ public class Exercise {
         name = resultSet.getString("name");
     }
 
-
     public static Vector<Exercise> GetExercisesByWorkoutId(Integer workoutId) throws SQLException {
         Statement statement = DatabaseConnection.connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM public.exercise WHERE workout_id =" + workoutId + ";");
@@ -37,6 +35,12 @@ public class Exercise {
             exercises.add(new Exercise((resultSet)));
         }
         return exercises;
+    }
+
+    public static void CreateExercise(Exercise exercise) throws SQLException {
+        Statement statement = DatabaseConnection.connection.createStatement();
+        statement.executeUpdate("INSERT INTO public.exercise(workout_id, name) VALUES ('"
+                + exercise.workoutId + "', '" + exercise.name + "');");
     }
 
     public Integer getExerciseId() {
