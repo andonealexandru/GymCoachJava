@@ -15,6 +15,8 @@ public class Set {
 
     @Override
     public String toString() {
+        if (mentions.equals(""))
+            return weight + " kg, " + repetitions + "reps";
         return weight + " kg, " + repetitions + "reps, " + mentions;
     }
 
