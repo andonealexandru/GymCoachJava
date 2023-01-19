@@ -16,7 +16,7 @@ public class Workout {
 
     private Integer userId;
 
-    public Workout(String name, Integer targetMuscleGroup, Integer userId) {
+    public Workout(String name, Integer muscleId, Integer userId) {
         this.name = name;
         this.muscleId = muscleId;
         this.userId = userId;

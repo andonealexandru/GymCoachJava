@@ -9,26 +9,28 @@ public class Set {
 
     private Integer setId;
     private Integer exerciseId;
-    private String name;
     private String mentions;
+    private Integer weight;
+    private Integer repetitions;
 
     @Override
     public String toString() {
-        return name;
+        return weight + " kg, " + repetitions + " reps, " + mentions;
     }
 
-    public Set(Integer setId, Integer exerciseId, String name, String mentions) {
-        this.setId = setId;
+    public Set(Integer exerciseId, String mentions, Integer weight, Integer repetitions) {
         this.exerciseId = exerciseId;
-        this.name = name;
         this.mentions = mentions;
+        this.weight = weight;
+        this.repetitions = repetitions;
     }
 
     public Set(ResultSet resultSet) throws SQLException {
         setId = resultSet.getInt("set_id");
         exerciseId = resultSet.getInt("exercise_id");
-        name = resultSet.getString("name");
         mentions = resultSet.getString("mentions");
+        weight = resultSet.getInt("weight");
+        repetitions = resultSet.getInt("repetitions");
     }
 
     public static Vector<Set> GetSetsByExerciseId(Integer exerciseId) throws SQLException {
@@ -40,6 +42,12 @@ public class Set {
             sets.add(new Set(resultSet));
         }
         return sets;
+    }
+
+    public static void CreateSet(Set set) throws SQLException {
+        Statement statement = DatabaseConnection.connection.createStatement();
+        statement.executeUpdate("INSERT INTO set(exercise_id, mentions, weight, repetitions) VALUES ('"
+                + set.exerciseId + "', '" + set.mentions + "', '" + set.weight + "', '" + set.repetitions + "');");
     }
 
     public Integer getSetId() {
@@ -58,19 +66,27 @@ public class Set {
         this.exerciseId = exerciseId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getMentions() {
         return mentions;
     }
 
     public void setMentions(String mentions) {
         this.mentions = mentions;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+    public Integer getRepetitions() {
+        return repetitions;
+    }
+
+    public void setRepetitions(Integer repetitions) {
+        this.repetitions = repetitions;
     }
 }

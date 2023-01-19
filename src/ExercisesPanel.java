@@ -16,7 +16,7 @@ public class ExercisesPanel extends JPanel {
     private JLabel labelWorkout;
     private JLabel labelWorkoutName;
     private JLabel labelAddExercise;
-    private JPasswordField textFieldAddExercise;
+    private JTextField textFieldAddExercise;
     private JButton buttonAddExercise;
     private JLabel labelExercise;
     private JLabel labelExerciseName;
@@ -25,7 +25,7 @@ public class ExercisesPanel extends JPanel {
     private JTextField textFieldRepetitions;
     private JLabel labelRepetitions;
     private JLabel labelWeight;
-    private JPasswordField textFieldWeight;
+    private JTextField textFieldWeight;
     private JLabel labelMentions;
     private JTextField textFieldMentions;
     private JButton buttonAddSet;
@@ -80,18 +80,48 @@ public class ExercisesPanel extends JPanel {
         labelWorkout = new JLabel ("Antrenament");
         labelWorkoutName = new JLabel ("antrenamentulMeu");
         labelAddExercise = new JLabel ("Adauga un exercitiu");
-        textFieldAddExercise = new JPasswordField (5);
+        textFieldAddExercise = new JTextField (5);
         buttonAddExercise = new JButton ("Adauga");
+        buttonAddExercise.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Exercise.CreateExercise(new Exercise(workoutId, textFieldAddExercise.getText()));
+                    listExercises.setListData(Exercise.GetExercisesByWorkoutId(workoutId));
+                    textFieldAddExercise.setText("");
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
         labelExercise = new JLabel ("Exercitiu");
         labelExerciseName = new JLabel ("exercitiul meu");
         labelAddSet = new JLabel ("Adauga un set");
         textFieldRepetitions = new JTextField (5);
         labelRepetitions = new JLabel ("Numar repetari:");
         labelWeight = new JLabel ("Greutate:");
-        textFieldWeight = new JPasswordField (5);
+        textFieldWeight = new JTextField (5);
         labelMentions = new JLabel ("Mentiuni:");
         textFieldMentions = new JTextField (5);
         buttonAddSet = new JButton ("Adauga");
+        buttonAddSet.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object selectedObj = listExercises.getSelectedValue();
+                if (selectedObj instanceof Exercise) {
+                    Exercise selectedExercise = (Exercise) selectedObj;
+                    try {
+                        Set.CreateSet(new Set(selectedExercise.getExerciseId(),
+                                textFieldMentions.getText(),
+                                Integer.parseInt(textFieldWeight.getText()),
+                                Integer.parseInt(textFieldRepetitions.getText())));
+
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
         comboBoxMuscleGroup = new JComboBox (comboBoxMuscleGroupItems);
         labelMuscleGroup = new JLabel ("Grupa de muschi a antrenamentului");
 
