@@ -128,7 +128,6 @@ public class ExercisesPanel extends JPanel {
                 }
             }
         });
-        comboBoxMuscleGroup = new JComboBox (comboBoxMuscleGroupItems);
         labelMuscleGroup = new JLabel ("Grupa de muschi a antrenamentului");
 
         //adjust size and set layout
