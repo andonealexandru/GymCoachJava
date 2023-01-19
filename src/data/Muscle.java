@@ -48,6 +48,13 @@ public class Muscle {
         return muscles;
     }
 
+    public static Muscle GetMuscleById(int id) throws SQLException {
+        Statement statement = DatabaseConnection.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM public.muscle WHERE muscle_id = " + id + ";");
+        resultSet.next();
+        return new Muscle(resultSet);
+    }
+
 
     public Integer getMuscleId() {
         return muscleId;

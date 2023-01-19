@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.Vector;
 
 public class ExercisesPanel extends JPanel {
     private JLabel labelTitle;
@@ -70,6 +71,7 @@ public class ExercisesPanel extends JPanel {
                     if (selectedObj instanceof Exercise) {
                         Exercise selectedExercise = (Exercise) selectedObj;
                         System.out.println(selectedExercise.getExerciseId());
+                        labelExerciseName.setText(selectedExercise.getName());
                         try {
                             listSets.setListData(Set.GetSetsByExerciseId(selectedExercise.getExerciseId()));
                         } catch (SQLException ex) {
@@ -79,9 +81,21 @@ public class ExercisesPanel extends JPanel {
                 }
             }
         });
+        Vector<Muscle> muscles = Muscle.GetMuscles();
         comboBoxMuscleGroup = new JComboBox(Muscle.GetMuscles());
+        comboBoxMuscleGroup.setSelectedItem(Muscle.GetMuscles().get(Workout.GetWorkoutForAnExercise(workoutId).getMuscleId()));
+        comboBoxMuscleGroup.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object selectedObj = comboBoxMuscleGroup.getSelectedItem();
+                if (selectedObj instanceof Muscle) {
+                    Muscle selectedMuscle = (Muscle) selectedObj;
+                    System.out.println(selectedMuscle.getName());
+                }
+            }
+        });
         labelWorkout = new JLabel ("Antrenament");
-        labelWorkoutName = new JLabel ("antrenamentulMeu");
+        labelWorkoutName = new JLabel (Workout.GetWorkoutForAnExercise(workoutId).getName());
         labelAddExercise = new JLabel ("Adauga un exercitiu");
         textFieldAddExercise = new JTextField (5);
         buttonAddExercise = new JButton ("Adauga");
@@ -98,7 +112,7 @@ public class ExercisesPanel extends JPanel {
             }
         });
         labelExercise = new JLabel ("Exercitiu");
-        labelExerciseName = new JLabel ("exercitiul meu");
+        labelExerciseName = new JLabel ("");
         labelAddSet = new JLabel ("Adauga un set");
         textFieldRepetitions = new JTextField (5);
         labelRepetitions = new JLabel ("Numar repetari:");
