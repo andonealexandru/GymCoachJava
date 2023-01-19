@@ -1,5 +1,6 @@
 import data.Exercise;
 import data.Set;
+import data.Workout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,7 +46,8 @@ public class ExercisesPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Main.changeCurrentPanel(new WorkoutsPanel(0));
+                    Workout workout = Workout.GetWorkoutForAnExercise(workoutId);
+                    Main.changeCurrentPanel(new WorkoutsPanel(workout.getUserId()));
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -115,6 +117,9 @@ public class ExercisesPanel extends JPanel {
                                 textFieldMentions.getText(),
                                 Integer.parseInt(textFieldWeight.getText()),
                                 Integer.parseInt(textFieldRepetitions.getText())));
+
+                        // refresh
+                        listSets.setListData(Set.GetSetsByExerciseId(selectedExercise.getExerciseId()));
 
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);

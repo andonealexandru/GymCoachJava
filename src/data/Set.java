@@ -9,20 +9,20 @@ public class Set {
 
     private Integer setId;
     private Integer exerciseId;
-    private String mentions;
     private Integer weight;
     private Integer repetitions;
+    private String mentions;
 
     @Override
     public String toString() {
-        return weight + " kg, " + repetitions + " reps, " + mentions;
+        return weight + " kg, " + repetitions + "reps, " + mentions;
     }
 
     public Set(Integer exerciseId, String mentions, Integer weight, Integer repetitions) {
         this.exerciseId = exerciseId;
-        this.mentions = mentions;
         this.weight = weight;
         this.repetitions = repetitions;
+        this.mentions = mentions;
     }
 
     public Set(ResultSet resultSet) throws SQLException {
@@ -66,14 +66,6 @@ public class Set {
         this.exerciseId = exerciseId;
     }
 
-    public String getMentions() {
-        return mentions;
-    }
-
-    public void setMentions(String mentions) {
-        this.mentions = mentions;
-    }
-
     public Integer getWeight() {
         return weight;
     }
@@ -88,5 +80,13 @@ public class Set {
 
     public void setRepetitions(Integer repetitions) {
         this.repetitions = repetitions;
+    }
+
+    public String getMentions() {
+        return mentions;
+    }
+
+    public void setMentions(String mentions) {
+        this.mentions = mentions;
     }
 }
